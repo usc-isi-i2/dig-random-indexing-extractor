@@ -1,6 +1,7 @@
 import os
 import sys
 import codecs
+from sklearn.externals import joblib
 
 import unittest
 
@@ -25,18 +26,24 @@ class TestRandomIndexingExtractor(unittest.TestCase):
 
     def load_model(self, file_path):
         model_file = os.path.join(os.path.dirname(__file__), file_path)
-        #TODO
-        model = ""
+        model = joblib.load(model_file)
 
         return model
 
+    def load_features(self, file_path):
+        feature_file = os.path.join(os.path.dirname(__file__), file_path)
+        feature_model = joblib.load(feature_file)
+
+        return feature_model
+
     def load_embeddings(self, file_path):
-        embeddings = list()
+        embeddings = dict()
         embeddings_file = os.path.join(os.path.dirname(__file__), file_path)
         with codecs.open(embeddings_file, 'r', 'utf-8') as f:
             for line in f:
                 embedding = json.loads(line)
-                embeddings.extend(embedding)
+                for k, v in embedding.items():
+                    embeddings[k] = v
     	
     	return embeddings
 
@@ -48,20 +55,24 @@ class TestRandomIndexingExtractor(unittest.TestCase):
 
         updated_doc = ep.extract(doc)
         print updated_doc
-        self.assertEquals(updated_doc['filtered_names']['value'], list(['Mary']))
+        # self.assertEquals(updated_doc['filtered_names']['value'], list(['Mary']))
 
 
     def test_random_indexing_extractor_actual(self):
     	model = self.load_model("model")
-        embeddings = self.load_model("embeddings.jl")
-        
-        doc = {"tokenized_text": ['There', 'once', 'was', 'a', 'woman', 'named', 'Mary', 'from', 'the', 'city', 'of', 'Charlotte', 'North', 'Carolina' ],"names": ['Charlotte', 'Mary']}
-    	e = RandomIndexingExtractor().set_embeddings(embeddings).set_model(model).set_metadata({"extractor": "person_name_random_indexing_extractor"})
+        feature_model = self.load_features("features")
+        embeddings = self.load_embeddings("embeddings.jl")
+        tokenized_text_2 = ['Los', 'Angeles', 'city', 'of', 'dreams', 'call']
+        names_2 = ['dreams', 'Los Angeles', 'call', 'city']
+        doc = {"tokenized_text": tokenized_text_2,"names": names_2}
+    	e = RandomIndexingExtractor().set_embeddings(embeddings).set_model(model).set_feature_model(feature_model).\
+            set_metadata({"extractor": "person_name_random_indexing_extractor"})
     	ep = ExtractorProcessor().set_input_fields(['tokenized_text', 'names']).set_output_field('filtered_names').set_extractor(e)
 
     	updated_doc = ep.extract(doc)
-    	#self.assertEquals(updated_doc['filtered_names']['value'], list(['Mary']))
+        print updated_doc
+    	self.assertEquals(updated_doc['filtered_names']['value'], list(['Los Angeles']))
 
-
+#python -m unittest discover
 if __name__ == '__main__':
     unittest.main()
