@@ -1,1 +1,5 @@
-digExtractor>=0.1.7
+digExtractor>=0.1.8
+scikit-learn==0.17
+nltk
+numpy
+scipy

@@ -3,6 +3,16 @@ try:
 except ImportError:
     from distutils.core import setup
 
+from setuptools import setup, find_packages
+from setuptools.command.install import install as _install
+from subprocess import call
+
+class Install(_install):
+    def run(self):
+        _install.run(self)
+        import nltk
+        nltk.download("punkt")
+
 config = {
     'name': 'digRandomIndexingExtractor',
     'description': 'digRandomIndexingExtractor',
@@ -14,7 +24,8 @@ config = {
     # these are the subdirs of the current directory that we care about
     'packages': ['digRandomIndexingExtractor'],
     'scripts': [],
-    'install_requires':['digExtractor>=0.1.7']
+    'install_requires':['digExtractor>=0.1.8', 'scikit-learn==0.17','nltk', 'numpy', 'scipy'],
+    'cmdclass':{'install': Install}
 }
 
 setup(**config)
