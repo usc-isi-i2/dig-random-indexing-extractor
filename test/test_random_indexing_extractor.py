@@ -50,11 +50,10 @@ class TestRandomIndexingExtractor(unittest.TestCase):
 
     def test_random_indexing_extractor_mock(self):
         doc = {"tokenized_text": ['There', 'once', 'was', 'a', 'woman', 'named', 'Mary', 'from', 'the', 'city', 'of', 'Charlotte', 'North', 'Carolina' ],"names": ['Charlotte', 'Mary']}
-        e = RandomIndexingExtractor().set_embeddings("").set_model(DummyModel()).set_metadata({"extractor": "dummy_random_indexing_extractor"})
+        e = RandomIndexingExtractor().set_embeddings({}).set_model(DummyModel()).set_metadata({"extractor": "dummy_random_indexing_extractor"})
         ep = ExtractorProcessor().set_input_fields(['tokenized_text', 'names']).set_output_field('filtered_names').set_extractor(e)
 
         updated_doc = ep.extract(doc)
-        print updated_doc
         # self.assertEquals(updated_doc['filtered_names']['value'], list(['Mary']))
 
 
@@ -70,7 +69,6 @@ class TestRandomIndexingExtractor(unittest.TestCase):
     	ep = ExtractorProcessor().set_input_fields(['tokenized_text', 'names']).set_output_field('filtered_names').set_extractor(e)
 
     	updated_doc = ep.extract(doc)
-        print updated_doc
     	self.assertEquals(updated_doc['filtered_names']['value'], list(['Los Angeles']))
 
 #python -m unittest discover
