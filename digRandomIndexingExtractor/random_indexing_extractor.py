@@ -2,14 +2,20 @@ from digExtractor.extractor import Extractor
 import re
 import copy 
 import types
+import sys
 from itertools import ifilter
-from nltk import sent_tokenize, word_tokenize
+from nltk import sent_tokenize, word_tokenize, data
 from sklearn.preprocessing import normalize
 
 class RandomIndexingExtractor(Extractor):
 
     def __init__(self):
         self.renamed_input_fields = ['tokens', 'values']
+        try:
+            mypath = data.find("tokenizers/punkt")
+        except LookupError as e: 
+            print "Unable to find nltk tokenizers/punkt.  Please install it!"
+            print e
 
     def get_embeddings(self):
         return self.embeddings
