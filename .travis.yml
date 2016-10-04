@@ -4,7 +4,7 @@ python:
 before_install:
 - sudo apt-get -qq update
 - sudo apt-get install gfortran libopenblas-dev liblapack-dev python-dev
-install: pip install -r requirements.txt
+install: grep -v "^#" requirements.txt | xargs pip install
 script: python -m unittest discover
 notifications:
   slack:
