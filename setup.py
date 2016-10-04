@@ -24,7 +24,7 @@ config = {
     # these are the subdirs of the current directory that we care about
     'packages': ['digRandomIndexingExtractor'],
     'scripts': [],
-    'install_requires':['digExtractor>=0.1.8', 'scikit-learn==0.17','nltk', 'numpy', 'scipy'],
+    'install_requires':['scipy>=0.9', 'numpy', 'digExtractor>=0.1.8', 'scikit-learn==0.17','nltk'],
     'cmdclass':{'install': Install}
 }
 
