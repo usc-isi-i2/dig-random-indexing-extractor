@@ -69,7 +69,7 @@ class TestRandomIndexingExtractor(unittest.TestCase):
     	ep = ExtractorProcessor().set_input_fields(['tokenized_text', 'names']).set_output_field('filtered_names').set_extractor(e)
 
     	updated_doc = ep.extract(doc)
-    	self.assertEquals(updated_doc['filtered_names']['value'], list(['Los Angeles']))
+    	self.assertEquals(updated_doc['filtered_names'][0]['value'], list(['Los Angeles']))
 
 #python -m unittest discover
 if __name__ == '__main__':
